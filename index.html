@@ -3,108 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>tED</a>
+                <!--<ul class="right hide-on-med-and-down">-->
+                    <!--<li><a href="sass.html">Sass</a></li>-->
+                    <!--<li><a href="badges.html">Components</a></li>-->
+                <!--</ul>-->
+            </div>
+        </nav>
+    </div>
+    <div class="wrapper">
+        <div class="chart-areas">
+            <div class="left-padding white-text">
+                <h5 class="left-align" style="font-weight: 300">real time sentiment analysis</h5>
+                <h2 class="left-align">By all sentiments</h2>
+            </div>
+            <div class="grid-1-3">
+                <div class= "chart" id="spline_line"></div>
+                <div class="profile">
+                    <div class="row">
+                        <div class="col l12 s12 white-text">
+                            <img src="https://lh6.googleusercontent.com/-mYchfD56zAs/AAAAAAAAAAI/AAAAAAAAAFQ/ktX8SRILx3A/photo.jpg" alt="" class="circle responsive-img valign profile-image-post" data-pin-nopin="true">
+                            <h5>Jon Laz</h5>
+                            <h6>designer</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">call tEd
+                            <i class="material-icons right">cloud</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="chart-groups">
+        <div class="card">
+            <div class="card-content">
+                <h4 style="font-weight: 600; color: #2bbbad;">Sentiment snapshot</h4>
+                <p>View the sentiments tED collected at the moment and for the selected range within the last day.</p>
+                <div id="neg_chart"></div>
+            </div>
+        </div>
+    </div>
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col l12 s12">
+                    <h5 class="white-text">tED</h5>
+                    <p class="grey-text text-lighten-4">Your personal assistant.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2017 tED
+            </div>
+        </div>
+    </footer>
+<script
+        src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script>
-    $(document).ready(function () {
-
-        Highcharts.setOptions({
-            global: {
-                useUTC: false
-            }
-        });
-
-        var POLL_INTERVAL = 5000, //ms
-            yMaxAxis = 10,
-            POINTS_TO_PLOT = 5,
-            NUM_FORMAT = 0; // decimal points
-
-        Highcharts.chart('container', {
-            credits: {
-                enabled: false
-            },
-            chart: {
-                type: 'spline',
-                animation: Highcharts.svg, // don't animate in old IE
-                marginRight: 10,
-                events: {
-                    load: function () {
-
-                        // set up the updating of the chart each POLL_INTERVAL ms
-                        var series = this.series[0];
-                        setInterval(function () {
-                            var x = (new Date()).getTime(), // current time
-                                y = Math.round(Math.random()*yMaxAxis) + 1;
-                            series.addPoint([x, y], true, true); // init polling data
-                        }, POLL_INTERVAL);
-                    }
-                }
-            },
-            title: {
-                text: '',
-                style: {
-                    display: 'none'
-                }
-            },
-            xAxis: {
-                type: 'datetime',
-                tickPixelInterval: 150,
-                labels: {
-                    enabled: false
-                }
-            },
-            yAxis: {
-                title: {
-                    text: '',
-                    style: {
-                        display: 'none'
-                    }
-                },
-                plotLines: [{
-                    value: 0,
-                    width: .5,
-                    color: '#000000'
-                }]
-            },
-            tooltip: {
-                enabled: false
-                /*formatter: function () {
-                 return '<b>' + this.series.name + '</b><br/>' +
-                 Highcharts.dateFormat('%d-%m-%Y %H:%M:%S', this.x) + '<br/>' +
-                 Highcharts.numberFormat(this.y, NUM_FORMAT);
-                 }*/
-            },
-            legend: {
-                enabled: false
-            },
-            exporting: {
-                enabled: false
-            },
-            series: [{
-                name: '',
-                showInLegend: false,
-                data: (function () {
-                    // generate an array of random data
-                    var data = [],
-                        time = (new Date()).getTime(),
-                        i;
-
-                    for (i = -POINTS_TO_PLOT; i <= 0; i += 1) {
-                        data.push({
-                            x: time + i * POLL_INTERVAL,
-                            y: Math.round(Math.random()*yMaxAxis) + 1
-                        });
-                    }
-                    return data;
-                }())
-            }]
-        });
-    });
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+<script src="js/client/main.js"></script>
 </body>
 </html>

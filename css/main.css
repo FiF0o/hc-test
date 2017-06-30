@@ -1,0 +1,75 @@
+:root {
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+}
+
+body {
+    background-color: #E7E9EC;
+}
+
+.grid-1-3 {
+ /*padding: 0 2em;*/
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas: "chart chart profile"
+    /*chart*/
+    /*profile*/
+}
+.chart {
+    grid-area: chart;
+    /*grid-column: main-start / main-end ;*/
+}
+
+.profile {
+    grid-area: profile;
+    /*grid-column: ;*/
+}
+.button-groups {
+    margin-top: 1em;
+}
+
+.chart-areas.charts {
+    background-color: #E07574;
+}
+
+#neg_chart {
+    min-width: 50%;
+    max-width: 100%;
+    width: 100%;
+}
+
+#spline_line {
+    min-width: 50%;
+    max-width: 100%;
+    width: 100%;
+}
+
+.profile {
+    padding: 2em;
+    background-color: #a72725;
+}
+
+/* utils */
+.left-padding {
+    padding-left: 1em;
+}
+
+.chart-groups {
+    padding: 2em;
+    background: inherit;
+}
+.wrapper {
+    background-color: #E07574;
+    padding: 2em 0;
+}
+
+@media (max-width: 600px) {
+    .grid-1-3 {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-areas: "profile"
+                                "chart";
+    }
+}
