@@ -4,4 +4,5 @@
 require('babel-register');
 require('dotenv').config();
 
+// require('./server/bot.js').init();
 require('./server/').init();
