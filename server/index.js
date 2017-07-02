@@ -6,6 +6,7 @@ import slackBot from './slack';
 // import slackWebClient from '../services/SlackWebClient'
 const request = require('request');
 const bodyParser = require('body-parser');
+import {database} from '../database/';
 
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -52,6 +53,7 @@ export function init() {
         }
         console.log(actionJSONPayload);
         sendMessageToSlackResponseURL(actionJSONPayload.response_url, message)
+        database.ref('node').push(actionJSONPayload.user.name)
     });
 
     /* Send Buttons to users */
