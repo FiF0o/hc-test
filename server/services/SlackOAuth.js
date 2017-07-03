@@ -1,11 +1,13 @@
 /**
  * Created by jonlazarini on 02/07/17.
  */
+import path from 'path';
+const request = require('request');
 
 export default function start(app) {
 
     app.get('/auth', (req, res) => {
-        res.sendFile(path.join(`${__dirname}`, '..', '/static', '/add_to_slack.html'))
+        res.sendFile(path.join(`${__dirname}`, '../..', '/static', '/add_to_slack.html'))
     });
 
     /** redirect url from the slack app to receives requests from slack auth api
