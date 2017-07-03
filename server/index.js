@@ -1,112 +1,64 @@
-/**
- * Created by jonlazarini on 29/06/17.
- */
-import express from 'express';
-import slackBot from './slack';
-// import slackWebClient from '../services/SlackWebClient'
-const request = require('request');
-const bodyParser = require('body-parser');
-import {database} from '../database/';
-
-
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
-
-
-function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
-    const postOptions = {
-        uri: responseURL,
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        json: JSONmessage
-    }
-    request(postOptions, (error, response, body) => {
-        if (error) console.error(error) // handle errors as you see fit
-    })
-}
-
-
-const app = express();
-
+#!/usr/bin/env node
 export function init() {
-    app.set('port', (process.env.PORT || 5001));
+    const app = require('./app');
+    const debug = require('debug')('book-api:server');
+    const http = require('http');
 
-    app.get('/', (request, response) => {
-        response.send({ success: true });
-    });
+    const port = normalizePort(process.env.PORT || '5001');
+    app.set('port', port);
 
+    const server = http.createServer(app);
 
-    /**
-     * ACTIONS - BUTTONS BOT
-     *
-     * curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!", "replace_original": false}' https://c0f5b5fe.ngrok.io/slack/actions/h1u9qRhGV8jXA1Sv3xqxVQcD
-     *
-     */
-    /* Listen, receive/respond to button actions/clicks */
-    app.post('/slack/actions', urlencodedParser, (req, res) =>{
-        res.status(200).end() // best practice to respond with 200 status
-        const actionJSONPayload = JSON.parse(req.body.payload) // parse URL-encoded payload JSON string
-        const message = {
-            "text": actionJSONPayload.user.name+" clicked: "+actionJSONPayload.actions[0].name,
-            "replace_original": false
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+
+    function normalizePort(val) {
+        var port = parseInt(val, 10);
+
+        if (isNaN(port)) {
+            // named pipe
+            return val;
         }
-        console.log(actionJSONPayload);
-        sendMessageToSlackResponseURL(actionJSONPayload.response_url, message)
-        database.ref('node').push(actionJSONPayload.user.name)
-    });
 
-    /* Send Buttons to users */
-    app.post('/slack/slash-commands/send-buttons', urlencodedParser, (req, res) =>{
-        console.log(req.body)
-        res.status(200).end() // best practice to respond with empty 200 status code
-        const reqBody = req.body
-        const responseURL = reqBody.response_url
-        if (reqBody.token != process.env.VERIFICATION_TOKEN) res.status(403).end("Access forbidden")
-        else {
-            const message = {
-                "text": "This is your first interactive message",
-                "attachments": [
-                    {
-                        "text": "Building buttons is easy right?",
-                        "fallback": "Shame... buttons aren't supported in this land",
-                        "callback_id": "button_tutorial",
-                        "color": "#3AA3E3",
-                        "attachment_type": "default",
-                        "actions": [
-                            {
-                                "name": "yes",
-                                "text": "yes",
-                                "type": "button",
-                                "value": "yes"
-                            },
-                            {
-                                "name": "no",
-                                "text": "no",
-                                "type": "button",
-                                "value": "no"
-                            },
-                            {
-                                "name": "maybe",
-                                "text": "maybe",
-                                "type": "button",
-                                "value": "maybe",
-                                "style": "danger"
-                            }
-                        ]
-                    }
-                ]
-            }
-            sendMessageToSlackResponseURL(responseURL, message)
+        if (port >= 0) {
+            // port number
+            return port;
         }
-    })
-    /**
-     *  Beginning chat bot here
-     */
-    slackBot();
 
-    // slackWebClient(app);
+        return false;
+    }
 
-    app.listen(app.get('port'), () => console.log('Node app is running on port', app.get('port')));
+    function onError(error) {
+        if (error.syscall !== 'listen') {
+            throw error;
+        }
+
+        const bind = typeof port === 'string'
+            ? 'Pipe ' + port
+            : 'Port ' + port;
+
+        // handle specific listen errors with friendly messages
+        switch (error.code) {
+            case 'EACCES':
+                console.error(bind + ' requires elevated privileges');
+                process.exit(1);
+                break;
+            case 'EADDRINUSE':
+                console.error(bind + ' is already in use');
+                process.exit(1);
+                break;
+            default:
+                throw error;
+        }
+    }
+
+    function onListening() {
+        const addr = server.address();
+        const bind = typeof addr === 'string'
+            ? 'pipe ' + addr
+            : 'port ' + addr.port;
+        debug('Listening on ' + bind);
+    }
 
 }
