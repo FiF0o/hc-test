@@ -8,8 +8,17 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-bot-test": "node index.js",
+    "// start-bot-test": "node index.js",
     "start": "node index.js",
+    "dev": "npm run server & npm run watch",
+    "server": "./node_modules/.bin/nodemon index.js",
+    "clean": "rm -r dist/*",
+    "build:html": "find ./src -name '*.html' -exec cp -prv '{}' 'dist' ';'",
+    "build:css": "cp -r ./src/css dist/",
+    "build:js": "cp -r ./src/js dist/",
+    "build:assets": "cp -r ./src/data dist/",
+    "build": "npm run build:html & npm run build:css & npm run build:js & npm run build:assets",
+    "watch": "./node_modules/.bin/watch 'npm run build' src/ server/",
     "debug:server": "./node_modules/.bin/babel-node-debug ./server/index.js --presets es2015 && open 'http://127.0.0.1:8080/?port=5858'"
   },
   "dependencies": {
@@ -33,6 +42,7 @@
   },
   "homepage": "https://github.com/FiF0o/hc-test#readme",
   "devDependencies": {
-    "babel-node-debug": "2.0.0"
+    "babel-node-debug": "2.0.0",
+    "nodemon": "1.11.0"
   }
 }

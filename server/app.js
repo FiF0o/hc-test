@@ -2,7 +2,7 @@
  * Created by jonlazarini on 29/06/17.
  */
 import express from 'express';
-import slackBot from './slack';
+import slackBot from './services/SlackBot';
 import path from 'path';
 
 // import slackWebClient from './services/SlackWebClient';
