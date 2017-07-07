@@ -4,8 +4,10 @@
 import express from 'express';
 import slackBot from './services/SlackBot';
 import path from 'path';
+const bodyParser = require('body-parser');
 
-// import slackWebClient from './services/SlackWebClient';
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
+
 import SlackOAuth from './services/SlackOAuth';
 
 
@@ -23,7 +25,6 @@ SlackOAuth(app);
 app.use('/slack', require('./routes/actions')) // listen to button actions
 app.use('/slash-commands', require('./routes/slash-commands'))
 slackBot();
-// slackWebClient.start(app);
 
 
 app.use((req, res, next) => {
@@ -37,7 +38,7 @@ app.use((err, req, res, next) => {
     res.locals.message = err.message
     res.locals.error = req.app.get('env') === 'development' ? err : {};
     res.status(err.status || 500);
-    res.send(`Seems that you got lost    ¯¯\\_(ツ)_/¯    ['/books', '/genres'] are available!`)
+    res.send(`Seems that you got lost    ¯¯\\_(ツ)_/¯    !`)
 })
 
 module.exports = app;

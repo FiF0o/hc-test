@@ -11,7 +11,6 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 /* Send Buttons to users */
 router.post('/send-buttons', urlencodedParser, (req, res) =>{
-    console.log(req.body)
     res.status(200).end() // best practice to respond with empty 200 status code
     const reqBody = req.body
     const responseURL = reqBody.response_url
